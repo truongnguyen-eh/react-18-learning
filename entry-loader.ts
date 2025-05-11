@@ -1,5 +1,5 @@
 const params = new URLSearchParams(window.location.search)
-const input = params.get('input') || 'fundamentals/event-handling/event-lifecycle.ts'
+const input = params.get('input') || './fundamentals/event-handling/event-lifecycle.ts'
 
 import(/* @vite-ignore */input)
   .then()
