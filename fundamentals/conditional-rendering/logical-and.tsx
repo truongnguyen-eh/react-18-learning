@@ -5,8 +5,7 @@ function WelcomeMessage({ isLoggedIn }) {
   return (
     <div className="welcome-box">
       <h1>{isLoggedIn ? 'Welcome back!' : 'Welcome, guest!'}</h1>
-      {isLoggedIn && <button>Logout</button>}
-      {!isLoggedIn && <button>Login</button>}
+      <button>{isLoggedIn ? 'Logout' : 'Login'}</button>
     </div>
   );
 }
