@@ -1,33 +1,37 @@
-// Built-in hooks: useState, useEffect, useRef,...
-import { useState, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom/client';
+import { useEffect, useState } from "react";
+import { createRoot } from "react-dom/client";
 
-// ✅ Custom hook to track previous value: usePrevious
-function usePrevious(value: number) {
-  const ref = useRef<number>();
-  
+function useMousePosition() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isTracking, setIsTracking] = useState(false);
+
   useEffect(() => {
-    ref.current = value;
-  }, [value]);
+    function handleMouseMove(e: MouseEvent){
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
 
-  return ref.current;
+    if (isTracking) {
+      document.addEventListener('mousemove', handleMouseMove);
+    }
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, [isTracking]);
+
+  return [position, isTracking, setIsTracking] as const;
 }
 
-function Counter() {
-  const [count, setCount] = useState(0);
-  const prevCount = usePrevious(count);
+function Dashboard() {
+  const [position, isTracking, setIsTracking] = useMousePosition();
 
   return (
     <div>
-      <p>Current count: {count}</p>
-      <p>Previous count: {prevCount ?? 'None'}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <p>Mouse position: ({position.x}, {position.y})</p>
+      <button onClick={() => setIsTracking(!isTracking)}>{isTracking ? 'Stop tracking me, please' : 'Start tracking'}</button>
     </div>
   );
 }
 
 const root = document.getElementById('root');
 if (root) {
-  window['REACT_ROOT'] = ReactDOM.createRoot(root)
-  window['REACT_ROOT'].render(<Counter />);
+  window['REACT_ROOT'] = createRoot(root)
+  window['REACT_ROOT'].render(<Dashboard />);
 }

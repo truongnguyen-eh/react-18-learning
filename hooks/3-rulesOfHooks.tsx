@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 
-function Bad() {  
+function BadExample() {  
   const [enable, setEnable] = useState(true);
   if (enable) {
     // 🔴 Bad: inside a condition (to fix, move it outside!)
@@ -12,7 +12,7 @@ function Bad() {
     }, 3000)
   }
   
-  return 'Bad';
+  return 'Bad Example';
 }
 
 // function Bad() {
@@ -81,5 +81,5 @@ if (root) {
   if (!window['REACT_ROOT']) {
     window['REACT_ROOT'] = createRoot(root)
   }
-  window['REACT_ROOT'].render(<Bad />);
+  window['REACT_ROOT'].render(<BadExample />);
 }
