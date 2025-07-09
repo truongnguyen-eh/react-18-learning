@@ -19,13 +19,18 @@ function useMousePosition() {
   return [position, isTracking, setIsTracking] as const;
 }
 
+const getRenderText = (isTracking: boolean) => {
+  return isTracking ? 'Stop tracking me, please' : 'Start tracking';
+}
+
 function Dashboard() {
   const [position, isTracking, setIsTracking] = useMousePosition();
+  const renderText = getRenderText(isTracking);
 
   return (
     <div>
       <p>Mouse position: ({position.x}, {position.y})</p>
-      <button onClick={() => setIsTracking(!isTracking)}>{isTracking ? 'Stop tracking me, please' : 'Start tracking'}</button>
+      <button onClick={() => setIsTracking(!isTracking)}>{renderText}</button>
     </div>
   );
 }
