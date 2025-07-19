@@ -1,15 +1,17 @@
 import ReactDOM from 'react-dom/client';
 
 function Counter() {
+  const increase = () => {
+
+  }
+
   return (
     <div>
-      <p>Count: {state.count}</p>
-      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
-      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    <button onClick={increase}>click</button>
     </div>
   );
 }
+
 
 const root = document.getElementById('root');
 if (root) {
