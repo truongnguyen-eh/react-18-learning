@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 function UserProfile() {
   const [user, setUser] = useState({ name: 'React', age: 25 });
   const [isLoading, setIsLoading] = useState(false);
+  const [fetchData, setFetchData] = useState<{ data: number }>();
+
   console.log('Component render/rerender', user)
 
   const handleUpdateUser = () => {
@@ -13,8 +15,6 @@ function UserProfile() {
 
     // 3. Skip re-render if same value from Object.is
   };
-
-  // 4. setUser has a stable identity during component lifetime
   
   return (
     <div>

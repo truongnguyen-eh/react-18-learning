@@ -7,7 +7,7 @@ function Counter() {
 
   return (
     <div>
-    <button onClick={increase}>click</button>
+    <button onClick={increase}>click {count}</button>
     </div>
   );
 }
