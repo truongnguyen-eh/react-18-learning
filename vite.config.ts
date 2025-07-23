@@ -8,7 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // 'react': 'react17',
-      // 'react-dom': 'react-dom17'
+      // 'react-dom/client': 'react-dom17'
     },
   },
   server: {
