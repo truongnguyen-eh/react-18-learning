@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 function Counter() {
   return (
     <div>
-      <p>Count: {state.count}</p>
+      <p>Count: {count}</p>
       <button onClick={() => dispatch({ type: 'increment' })}>+</button>
       <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
       <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
