@@ -27,7 +27,9 @@ function UserProfile() {
 const root = document.getElementById('root');
 if (root) {
   if (typeof ReactDOM.createRoot === 'function') {
+    if (!window['REACT_ROOT']) {
     window['REACT_ROOT'] = ReactDOM.createRoot(root)
+    }
     window['REACT_ROOT'].render(
       <UserProfile />
     );

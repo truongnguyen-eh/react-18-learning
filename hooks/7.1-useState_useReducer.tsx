@@ -151,6 +151,8 @@ const TicTacToe = () => {
 
 const root = document.getElementById('root');
 if (root) {
+  if (!window['REACT_ROOT']) {
   window['REACT_ROOT'] = ReactDOM.createRoot(root)
+  }
   window['REACT_ROOT'].render(<TicTacToe />);
 }
