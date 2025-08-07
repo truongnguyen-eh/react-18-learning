@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "fundamentals", "hooks", "concurrency"],
+  "include": ["src", "fundamentals", "hooks", "concurrency", "global.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
-} 
+}
