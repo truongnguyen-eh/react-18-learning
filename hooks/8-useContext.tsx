@@ -1,41 +1,72 @@
-import { useState } from "react";
+import {
+  createContext,
+  memo,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import ReactDOM from "react-dom/client";
 
-function App() {
+const ThemeContext = createContext<{
+  theme: string;
+  setTheme: (theme: string) => void;
+} | null>(null);
+
+const ThemeContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState("light");
+  const [count, setCount] = useState(0);
+
+  const value = useMemo(() => ({ theme, setTheme }), [theme]);
+
   return (
-    <div>
-      <div>Theme: {theme}</div>
-      <Toolbar theme={theme} setTheme={setTheme} />
-    </div>
+    <ThemeContext.Provider value={value}>
+      <button onClick={() => setCount(count + 1)}>Increment Count</button>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+function App() {
+  return (
+    <ThemeContextProvider>
+      <div>
+        <Toolbar />
+      </div>
+    </ThemeContextProvider>
   );
 }
 
 // This component receives props it doesn't use, just to pass them down
-function Toolbar({
-  theme,
-  setTheme,
-}: {
-  theme: string;
-  setTheme: (theme: string) => void;
-}) {
+const Toolbar = () => {
+  console.log("re-render Toolbar");
+
   return (
     <div>
-      <ThemedButton theme={theme} setTheme={setTheme} />
+      <ThemedButton />
     </div>
   );
-}
+};
+
+const useThemeContext = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error(
+      "useThemeContext must be used within a ThemeContextProvider"
+    );
+  }
+  return context;
+};
 
 // This component finally receives the props it needs
-function ThemedButton({
-  theme,
-  setTheme,
-}: {
-  theme: string;
-  setTheme: (theme: string) => void;
-}) {
+function ThemedButton() {
+  console.log("re-render ThemedButton");
+
+  const { theme, setTheme } = useThemeContext();
+
   return (
     <div>
+      <div>Theme: {theme}</div>
       <button
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         style={{

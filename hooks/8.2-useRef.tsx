@@ -1,31 +1,46 @@
 import ReactDOM from "react-dom/client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 function TimerWithState() {
-  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  // const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const timerIdRef = useRef<NodeJS.Timeout>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [count, setCount] = useState(0);
+  const [showInput, setShowInput] = useState(false);
 
   const startTimer = () => {
     // 🔴 Bad: Setting state causes a re-render
-    timerId && clearInterval(timerId);
+    timerIdRef.current && clearInterval(timerIdRef.current);
     const id = setInterval(() => {
       console.log("Timer is running...");
     }, 1000);
-    setTimerId(id);
+    timerIdRef.current = id;
   };
 
   const stopTimer = () => {
-    if (timerId) {
-      clearInterval(timerId);
+    if (timerIdRef.current) {
+      clearInterval(timerIdRef.current);
       // Clean up by setting state to null, causing another re-render
-      setTimerId(null);
+      timerIdRef.current = null;
     }
   };
 
-  console.log("render TimerWithState");
+  const ref = useCallback((node: HTMLInputElement) => {
+    console.log("ref called", node);
+    if (node) {
+      node.focus();
+    }
+  }, []);
 
   return (
     <div>
+      {showInput && <input ref={ref} />}
+      <button onClick={() => setShowInput(!showInput)}>
+        {showInput ? "Hide Input" : "Show Input"}
+      </button>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment Count</button>
       <button onClick={startTimer}>Start Timer</button>
       <button onClick={stopTimer}>Stop Timer</button>
       <p>Component will re-render every time the timer ID state is set.</p>
