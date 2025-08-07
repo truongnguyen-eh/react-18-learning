@@ -1,60 +1,77 @@
 import ReactDOM from "react-dom/client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-// Creating a single, large context
-export const AuthAndThemeContext = createContext({
-  user: { name: "Alice" },
-  theme: "light",
-  setUser: (user: { name: string }) => {},
-  setTheme: (theme: string) => {},
-});
+const StoreContext = createContext<{
+  text: string;
+  count: number;
+  setText: (text: string) => void;
+  setCount: (count: number) => void;
+} | null>(null);
 
-export const AuthAndThemeContextProvider = ({
+const TextAndCounterProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState({ name: "Alice" });
-  const [theme, setTheme] = useState("light");
-
-  // The context value contains both user and theme
-  const value = { user, theme, setUser, setTheme };
-
+  const [text, setText] = useState("Hello");
+  const [count, setCount] = useState(0);
   return (
-    <AuthAndThemeContext.Provider value={value}>
+    <StoreContext.Provider value={{ text, count, setText, setCount }}>
       {children}
-    </AuthAndThemeContext.Provider>
+    </StoreContext.Provider>
   );
 };
 
-// UserProfile component only needs user info
-function UserProfile() {
-  const { user } = useContext(AuthAndThemeContext);
-  console.log("UserProfile re-rendered");
-  return <h2>Hello, {user.name}</h2>;
-}
+const useTextAndCounterContext = () => {
+  const context = useContext(StoreContext);
+  if (!context) {
+    throw new Error(
+      "useTextAndCounterContext must be used within a TextAndCounterProvider"
+    );
+  }
+  return context;
+};
 
-// ThemeSwitcher component only needs theme settings
-function ThemeSwitcher() {
-  const { theme, setTheme } = useContext(AuthAndThemeContext);
-  console.log("ThemeSwitcher re-rendered");
-  return (
-    <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-      Toggle Theme
-    </button>
-  );
-}
+const Counter = () => {
+  const { count } = useTextAndCounterContext();
+  console.log("Counter component rendered");
 
-// Parent Component
-function App() {
+  return <div>The current count is: {count}</div>;
+};
+
+const TextDisplay = () => {
+  const { text, setText } = useTextAndCounterContext();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  };
+
+  console.log("TextDisplay component rendered");
+
   return (
-    <AuthAndThemeContextProvider>
-      <UserProfile />
-      <ThemeSwitcher />
-    </AuthAndThemeContextProvider>
+    <div>
+      <p>Text: {text}</p>
+      <input value={text} onChange={handleChange} />
+    </div>
   );
-}
+};
+
+const ButtonIncrement = () => {
+  const { count, setCount } = useTextAndCounterContext();
+  return <button onClick={() => setCount(count + 1)}>Increment Count</button>;
+};
+
+const App = () => {
+  return (
+    <TextAndCounterProvider>
+      <ButtonIncrement />
+      <hr />
+      <Counter />
+      <TextDisplay />
+    </TextAndCounterProvider>
+  );
+};
 
 const root = document.getElementById("root");
 if (root) {
